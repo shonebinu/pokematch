@@ -16,19 +16,19 @@ function PokemonList({ cardsCount }) {
         const data = await response.json();
         const pokemons = data?.results;
 
-        const detailedPokemonData = [];
+        const detailedPokemonData = await Promise.all(
+          pokemons
+            .filter((_, index) => index % 3 === 0) // Skip every 3 element to skip upgraded pokemons
+            .map(async (poke) => {
+              const pokeResponse = await fetch(poke.url);
+              const pokeData = await pokeResponse.json();
 
-        for (let i = 0; i < pokemons.length; i += 3) {
-          // Skipping 3 elements to skip upgraded pokemons
-          const poke = pokemons[i];
-
-          const pokeResponse = await fetch(poke.url);
-          const pokeData = await pokeResponse.json();
-
-          const pokeImage = pokeData?.sprites?.front_default;
-
-          detailedPokemonData.push({ name: poke.name, image: pokeImage });
-        }
+              return {
+                name: poke.name,
+                image: pokeData?.sprites?.front_default,
+              };
+            })
+        );
 
         setPokemonData(detailedPokemonData);
       } catch (error) {
