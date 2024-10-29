@@ -3,12 +3,11 @@ function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function getRandomPokemonsUpToLimit(arr, limit = 5) {
+function shufflePokemonData(arr) {
   return arr
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value)
-    .slice(0, limit);
+    .map(({ value }) => value);
 }
 
-export { randomIntFromInterval, getRandomPokemonsUpToLimit };
+export { randomIntFromInterval, shufflePokemonData };

@@ -1,9 +1,6 @@
-import { useState } from "react";
 import PokemonItem from "./PokemonItem";
 
-function PokemonList({ pokemons }) {
-  const [flip, setFlip] = useState(false);
-
+function PokemonList({ pokemons, flip, handleFlip }) {
   return (
     <section className="flex gap-4 w-2/3">
       {pokemons.map((pokemon) => (
@@ -11,7 +8,7 @@ function PokemonList({ pokemons }) {
           key={pokemon.image}
           pokemon={pokemon}
           flip={flip}
-          setFlip={setFlip}
+          handleFlip={handleFlip}
         />
       ))}
     </section>

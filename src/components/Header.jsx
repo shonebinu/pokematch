@@ -11,7 +11,9 @@ function Header({ score, highScore, cardsCount }) {
       </div>
 
       <div className="backdrop-blur rounded px-5">
-        <p className="text-3xl">HIGH SCORE: {highScore}</p>
+        <p className="text-3xl">
+          HIGH SCORE: <span>{highScore}</span>
+        </p>
       </div>
 
       <div>

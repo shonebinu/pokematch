@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import PokemonList from "./components/PokemonList";
-import { getRandomPokemonsUpToLimit, randomIntFromInterval } from "./utils";
+import { shufflePokemonData, randomIntFromInterval } from "./utils";
 
 const fetchPokemonData = async (
   pokemonsOffset = 0,
@@ -26,7 +26,6 @@ const fetchPokemonData = async (
           };
         })
     );
-    console.log(detailedPokemonData);
     setPokemonData(detailedPokemonData);
   } catch (error) {
     setPokemonData(`Error: ${error.message}`);
@@ -35,8 +34,22 @@ const fetchPokemonData = async (
 
 function App() {
   const [pokemonData, setPokemonData] = useState([]);
-  const cardLimit = 5;
-  const pokemonsCountLimit = cardLimit * 4; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke + 1 extra
+  const cardsLimit = 5;
+  const pokemonsCountLimit = cardsLimit * 4; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke + 1 extra
+
+  const [score, setScore] = useState(0);
+  const [flip, setFlip] = useState(false);
+  const [selectedPokemons, setSelectedPokemons] = useState([]);
+
+  const handleFlip = (pokemonName) => {
+    if (!selectedPokemons.includes(pokemonName)) {
+      setFlip(true);
+      setScore(score + 1);
+      setSelectedPokemons([...selectedPokemons, pokemonName]);
+      setPokemonData(shufflePokemonData(pokemonData));
+      setTimeout(() => setFlip(false), 500);
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -56,9 +69,11 @@ function App() {
 
   return (
     <main className="flex flex-col items-center gap-6 p-4">
-      <Header score={3} highScore={10} cardsCount={5} />
+      <Header score={score} highScore={10} cardsCount={cardsLimit} />
       <PokemonList
-        pokemons={getRandomPokemonsUpToLimit(pokemonData, cardLimit)}
+        pokemons={pokemonData.slice(0, cardsLimit)}
+        flip={flip}
+        handleFlip={handleFlip}
       />
     </main>
   );
