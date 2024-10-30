@@ -23,6 +23,7 @@ const fetchPokemonData = async (
           return {
             name: poke.name,
             image: pokeData?.sprites?.front_default,
+            cry: pokeData?.cries?.latest,
           };
         })
     );

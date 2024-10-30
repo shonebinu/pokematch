@@ -9,7 +9,12 @@ function PokemonItem({ pokemon, flip, handleFlip }) {
       {!flip && (
         <div
           className="flex flex-col justify-between w-full h-full"
-          onClick={() => handleFlip(pokemon.name)}
+          onClick={() => {
+            const pokemonCry = new Audio(pokemon.cry);
+            pokemonCry.volume = 0.02;
+            pokemonCry.play();
+            handleFlip(pokemon.name);
+          }}
         >
           <img src={pokemon.image} alt={pokemon.name} className="w-full" />
           <p className="font-bold text-xl pb-2 text-center font-cardsans">
