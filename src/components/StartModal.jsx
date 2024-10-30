@@ -27,7 +27,7 @@ function StartModal({ setCardsLimit }) {
 
   return (
     <dialog ref={dialogRef} className="p-0 bg-transparent">
-      <div className="flex flex-col justify-center items-center gap-5 p-20 rounded text-white backdrop-blur bg-black/20 border">
+      <div className="flex flex-col justify-center items-center gap-5 px-20 py-14 rounded text-white backdrop-blur bg-black/20 border">
         <h2 className="text-2xl text-center">
           Welcome to
           <span className="text-3xl flex items-center">
