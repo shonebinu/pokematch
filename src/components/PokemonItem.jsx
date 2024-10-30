@@ -1,6 +1,8 @@
 import PokeballImage from "../assets/pokeball.png";
 
 function PokemonItem({ pokemon, flip, handleFlip }) {
+  const pokemonCry = new Audio(pokemon.cry);
+  pokemonCry.volume = 0.02;
   return (
     <div
       className="backdrop-blur bg-black/15 flex-1 p-2 aspect-[5/6] rounded cursor-pointer
@@ -10,8 +12,6 @@ function PokemonItem({ pokemon, flip, handleFlip }) {
         <div
           className="flex flex-col justify-between w-full h-full"
           onClick={() => {
-            const pokemonCry = new Audio(pokemon.cry);
-            pokemonCry.volume = 0.02;
             pokemonCry.play();
             handleFlip(pokemon.name);
           }}
