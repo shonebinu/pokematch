@@ -43,23 +43,21 @@ function App() {
   const [selectedPokemons, setSelectedPokemons] = useState([]);
 
   let highScore = localStorage.getItem("highScore") ?? 0;
-  if (highScore < score) {
+  if (highScore < score && score <= cardsLimit) {
     highScore = score;
     localStorage.setItem("highScore", score);
   }
 
   const handleFlip = (pokemonName) => {
     if (!selectedPokemons.includes(pokemonName)) {
-      setFlip(true);
-      setSelectedPokemons([...selectedPokemons, pokemonName]);
-      setPokemonData(shufflePokemonData(pokemonData));
-      setScore((score) => {
-        const newScore = score + 1;
-
-        if (newScore !== cardsLimit) setTimeout(() => setFlip(false), 700); // Game end
-
-        return newScore;
-      });
+      const newScore = score + 1;
+      if (newScore <= cardsLimit) {
+        setFlip(true);
+        setSelectedPokemons([...selectedPokemons, pokemonName]);
+        setPokemonData(shufflePokemonData(pokemonData));
+        setScore(newScore);
+        setTimeout(() => setFlip(false), 700);
+      }
     }
   };
 
