@@ -3,11 +3,10 @@ import PokeballImage from "../assets/pokeball.png";
 function PokemonItem({ pokemon, flip, handleFlip, setLoadedImages }) {
   const pokemonCry = new Audio(pokemon.cry);
   pokemonCry.volume = 0.02;
-  console.log(flip);
   return (
     <div
       className="backdrop-blur bg-black/15 flex-1 p-2 rounded cursor-pointer
-            transform hover:scale-105 hover:-rotate-1 transition-transform duration-500 ease-in-out shadow-lg"
+            transform hover:scale-105 hover:-rotate-1 transition-transform duration-500 ease-in-out shadow-lg aspect-[5/6]"
       onClick={() => {
         if (!flip) {
           pokemonCry.play();
@@ -19,9 +18,7 @@ function PokemonItem({ pokemon, flip, handleFlip, setLoadedImages }) {
         src={pokemon.image}
         alt={pokemon.name}
         className={`w-full ${flip ? "invisible absolute" : ""}`}
-        onLoad={() => {
-          setLoadedImages((count) => count + 1);
-        }}
+        onLoad={() => setLoadedImages((count) => count + 1)}
       />
       {!flip && (
         <p className="font-bold text-xl pb-2 text-center font-cardsans">

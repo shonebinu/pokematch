@@ -11,6 +11,7 @@ const fetchPokemonData = async (
   setPokemonData
 ) => {
   try {
+    console.log("fetch");
     const response = await fetch(
       `https://pokeapi.co/api/v2/pokemon?offset=${pokemonsOffset}&limit=${pokemonsLimit}`
     );
@@ -71,7 +72,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (loadedImages === cardsLimit && cardsLimit !== 0) setFlip(false);
+    if (loadedImages >= cardsLimit && cardsLimit !== 0) setFlip(false);
   }, [loadedImages, cardsLimit]);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ function App() {
 
     let mounted = true;
 
-    if (mounted) {
+    if (mounted && cardsLimit > 0) {
       fetchPokemonData(
         randomIntFromInterval(0, 1000),
         pokemonsCountLimit,
