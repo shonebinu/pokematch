@@ -35,19 +35,30 @@ const fetchPokemonData = async (
 function App() {
   const [pokemonData, setPokemonData] = useState([]);
   const cardsLimit = 5;
-  const pokemonsCountLimit = cardsLimit * 4; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke + 1 extra
+  const pokemonsCountLimit = cardsLimit * 4; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke + 1
 
   const [score, setScore] = useState(0);
   const [flip, setFlip] = useState(false);
   const [selectedPokemons, setSelectedPokemons] = useState([]);
 
+  let highScore = localStorage.getItem("highScore") ?? 0;
+  if (highScore < score) {
+    highScore = score;
+    localStorage.setItem("highScore", score);
+  }
+
   const handleFlip = (pokemonName) => {
     if (!selectedPokemons.includes(pokemonName)) {
       setFlip(true);
-      setScore(score + 1);
       setSelectedPokemons([...selectedPokemons, pokemonName]);
       setPokemonData(shufflePokemonData(pokemonData));
-      setTimeout(() => setFlip(false), 500);
+      setScore((score) => {
+        const newScore = score + 1;
+
+        if (newScore !== cardsLimit) setTimeout(() => setFlip(false), 700); // Game end
+
+        return newScore;
+      });
     }
   };
 
@@ -69,7 +80,7 @@ function App() {
 
   return (
     <main className="flex flex-col items-center gap-6 p-4">
-      <Header score={score} highScore={10} cardsCount={cardsLimit} />
+      <Header score={score} highScore={highScore} cardsCount={cardsLimit} />
       <PokemonList
         pokemons={pokemonData.slice(0, cardsLimit)}
         flip={flip}
