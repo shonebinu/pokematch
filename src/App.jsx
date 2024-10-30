@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import PokemonList from "./components/PokemonList";
 import { shufflePokemonData, randomIntFromInterval } from "./utils";
 import StartModal from "./components/StartModal";
+import EndModal from "./components/EndModal";
 
 const fetchPokemonData = async (
   pokemonsOffset = 0,
@@ -59,8 +60,8 @@ function App() {
         setPokemonData(shufflePokemonData(pokemonData));
         setScore(newScore);
         setTimeout(() => setFlip(false), 700);
-      } else {
-        setGameEnd("win");
+
+        if (newScore === cardsLimit) setGameEnd("win");
       }
     } else {
       setGameEnd("lose");
@@ -94,6 +95,17 @@ function App() {
         handleFlip={handleFlip}
       />
       <StartModal setCardsLimit={setCardsLimit} />
+      {gameEnd && (
+        <EndModal
+          endStatus={gameEnd}
+          score={score}
+          cardsLimit={cardsLimit}
+          setCardsLimit={setCardsLimit}
+          setScore={setScore}
+          setSelectedPokemons={setSelectedPokemons}
+          setGameEnd={setGameEnd}
+        />
+      )}
     </main>
   );
 }
