@@ -40,8 +40,10 @@ function App() {
   const [cardsLimit, setCardsLimit] = useState(0);
 
   const [score, setScore] = useState(0);
-  const [flip, setFlip] = useState(false);
+  const [flip, setFlip] = useState(true);
   const [selectedPokemons, setSelectedPokemons] = useState([]);
+
+  const [loadedImages, setLoadedImages] = useState(0);
 
   const [gameEnd, setGameEnd] = useState(false);
 
@@ -69,7 +71,11 @@ function App() {
   };
 
   useEffect(() => {
-    const pokemonsCountLimit = cardsLimit * 4; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke + 1
+    if (loadedImages === cardsLimit && cardsLimit !== 0) setFlip(false);
+  }, [loadedImages, cardsLimit]);
+
+  useEffect(() => {
+    const pokemonsCountLimit = cardsLimit * 3; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke
 
     let mounted = true;
 
@@ -93,6 +99,7 @@ function App() {
         pokemons={pokemonData.slice(0, cardsLimit)}
         flip={flip}
         handleFlip={handleFlip}
+        setLoadedImages={setLoadedImages}
       />
       <StartModal setCardsLimit={setCardsLimit} />
       {gameEnd && (
