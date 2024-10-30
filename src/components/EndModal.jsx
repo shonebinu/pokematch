@@ -31,11 +31,23 @@ function EndModal({
 
   useEffect(() => {
     if (dialogRef.current) dialogRef.current.showModal();
+
+    const handleEscapeKey = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
   }, []);
 
   return (
     <dialog ref={dialogRef} className="p-0 bg-transparent">
-      <div className="flex flex-col justify-center items-center gap-3 p-8 rounded text-white backdrop-blur bg-black/15">
+      <div className="flex flex-col justify-center items-center gap-5 p-20 rounded text-white backdrop-blur bg-black/20 border">
         <div className="flex flex-col items-center">
           <h3 className="text-3xl">{statusData.title}</h3>
           <h3 className="text-2xl">{statusData.score}</h3>

@@ -11,11 +11,23 @@ function StartModal({ setCardsLimit }) {
 
   useEffect(() => {
     if (dialogRef.current) dialogRef.current.showModal();
+
+    const handleEscapeKey = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
   }, []);
 
   return (
     <dialog ref={dialogRef} className="p-0 bg-transparent">
-      <div className="flex flex-col justify-center items-center gap-3 p-8 rounded text-white backdrop-blur bg-black/15">
+      <div className="flex flex-col justify-center items-center gap-5 p-20 rounded text-white backdrop-blur bg-black/20 border">
         <h2 className="text-2xl text-center">
           Welcome to
           <span className="text-3xl flex items-center">
