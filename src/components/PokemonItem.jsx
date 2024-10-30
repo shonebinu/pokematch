@@ -18,7 +18,7 @@ function PokemonItem({ pokemon, flip, handleFlip, setLoadedImages }) {
         src={pokemon.image}
         alt={pokemon.name}
         className={`w-full ${flip ? "invisible absolute" : ""}`}
-        onLoad={() => setLoadedImages((count) => count + 1)}
+        onLoad={() => pokemon.image && setLoadedImages((count) => count + 1)}
       />
       {!flip && (
         <p className="font-bold text-xl pb-2 text-center font-cardsans">

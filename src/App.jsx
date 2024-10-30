@@ -80,6 +80,9 @@ function App() {
 
     let mounted = true;
 
+    setPokemonData(new Array(cardsLimit).fill(""));
+    setFlip(true);
+
     if (mounted && cardsLimit > 0) {
       fetchPokemonData(
         randomIntFromInterval(0, 1000),
