@@ -7,7 +7,7 @@ function PokemonItem({ pokemon, flip, handleFlip, setLoadedImages }) {
     <div
       className={`backdrop-blur bg-black/15 flex-1 p-2 rounded cursor-pointer
             transform hover:scale-105 hover:-rotate-1 transition-transform duration-500 ease-in-out shadow-lg ${
-              flip ? "aspect-[5/6]" : ""
+              flip ? "aspect-[5.2/6]" : ""
             }`}
       onClick={() => {
         if (!flip) {
