@@ -3,18 +3,21 @@ import PokeballImage from "../assets/pokeball.png";
 function PokemonItem({ pokemon, flip, handleFlip, setLoadedImages }) {
   const pokemonCry = new Audio(pokemon.cry);
   pokemonCry.volume = 0.02;
+
+  const handleClick = () => {
+    if (!flip) {
+      pokemonCry.play();
+      handleFlip(pokemon.name);
+    }
+  };
+
   return (
     <div
       className={`backdrop-blur bg-black/15 flex-1 p-2 rounded cursor-pointer flex flex-col
             transform hover:scale-105 hover:-rotate-1 transition-transform duration-500 ease-in-out shadow-lg ${
               flip ? "aspect-[5.2/6]" : ""
             }`}
-      onClick={() => {
-        if (!flip) {
-          pokemonCry.play();
-          handleFlip(pokemon.name);
-        }
-      }}
+      onClick={handleClick}
     >
       <img
         src={pokemon.image}
