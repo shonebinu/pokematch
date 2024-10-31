@@ -12,7 +12,7 @@ function EndModal({
   const dialogRef = useRef(null);
 
   const handleClick = (limit) => {
-    setCardsLimit(limit);
+    setCardsLimit({ count: limit });
     setScore(0);
     setSelectedPokemons([]);
     setGameEnd(false);
@@ -53,7 +53,7 @@ function EndModal({
           <h3 className="text-2xl">{statusData.score}</h3>
         </div>
         <p className="text-lg">Select a mode to play again:</p>
-        <div className="flex gap-4 text-xl">
+        <div className="flex gap-4 text-xl flex-wrap justify-center">
           <button
             className="border rounded py-1 px-3 hover:scale-105 transition"
             onFocus={(e) => e.target.blur()}
@@ -66,6 +66,12 @@ function EndModal({
             onClick={() => handleClick(10)}
           >
             Veteran
+          </button>
+          <button
+            className="border rounded py-1 px-3 hover:scale-105 transition"
+            onClick={() => handleClick(15)}
+          >
+            Expert
           </button>
         </div>
         <a

@@ -5,7 +5,7 @@ function StartModal({ setCardsLimit }) {
   const dialogRef = useRef(null);
 
   const handleClick = (limit) => {
-    setCardsLimit(limit);
+    setCardsLimit({ count: limit });
     dialogRef.current.close();
   };
 
@@ -36,7 +36,7 @@ function StartModal({ setCardsLimit }) {
           </span>
         </h2>
         <p className="text-lg">Select a difficulty mode:</p>
-        <div className="flex gap-4 text-xl">
+        <div className="flex gap-4 text-xl flex-wrap justify-center">
           <button
             className="border rounded py-1 px-3 hover:scale-105 transition"
             onClick={() => handleClick(5)}
@@ -49,6 +49,12 @@ function StartModal({ setCardsLimit }) {
             onClick={() => handleClick(10)}
           >
             Veteran
+          </button>
+          <button
+            className="border rounded py-1 px-3 hover:scale-105 transition"
+            onClick={() => handleClick(15)}
+          >
+            Expert
           </button>
         </div>
         <a

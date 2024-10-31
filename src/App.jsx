@@ -37,7 +37,7 @@ const fetchPokemonData = async (
 
 function App() {
   const [pokemonData, setPokemonData] = useState([]);
-  const [cardsLimit, setCardsLimit] = useState(0);
+  const [cardsLimit, setCardsLimit] = useState({ count: 0 });
 
   const [score, setScore] = useState(0);
   const [flip, setFlip] = useState(true);
@@ -48,7 +48,7 @@ function App() {
   const [gameEnd, setGameEnd] = useState(false);
 
   let highScore = localStorage.getItem("highScore") ?? 0;
-  if (highScore < score && score <= cardsLimit) {
+  if (highScore < score && score <= cardsLimit.count) {
     highScore = score;
     localStorage.setItem("highScore", score);
   }
@@ -56,14 +56,14 @@ function App() {
   const handleFlip = (pokemonName) => {
     if (!selectedPokemons.includes(pokemonName)) {
       const newScore = score + 1;
-      if (newScore <= cardsLimit) {
+      if (newScore <= cardsLimit.count) {
         setFlip(true);
         setSelectedPokemons([...selectedPokemons, pokemonName]);
         setPokemonData(shufflePokemonData(pokemonData));
         setScore(newScore);
         setTimeout(() => setFlip(false), 700);
 
-        if (newScore === cardsLimit) setGameEnd("win");
+        if (newScore === cardsLimit.count) setGameEnd("win");
       }
     } else {
       setGameEnd("lose");
@@ -71,18 +71,19 @@ function App() {
   };
 
   useEffect(() => {
-    if (loadedImages >= cardsLimit && cardsLimit !== 0) setFlip(false);
+    if (loadedImages >= cardsLimit.count && cardsLimit.count !== 0)
+      setFlip(false);
   }, [loadedImages, cardsLimit]);
 
   useEffect(() => {
-    const pokemonsCountLimit = cardsLimit * 3; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke
+    const pokemonsCountLimit = cardsLimit.count * 3; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke
 
     let mounted = true;
 
-    setPokemonData(new Array(cardsLimit).fill(""));
+    setPokemonData(new Array(cardsLimit.count).fill(""));
     setFlip(true);
 
-    if (mounted && cardsLimit > 0) {
+    if (mounted && cardsLimit.count > 0) {
       fetchPokemonData(
         randomIntFromInterval(0, 1000),
         pokemonsCountLimit,
@@ -97,9 +98,13 @@ function App() {
 
   return (
     <main className="flex flex-col items-center gap-6 p-4">
-      <Header score={score} highScore={highScore} cardsCount={cardsLimit} />
+      <Header
+        score={score}
+        highScore={highScore}
+        cardsCount={cardsLimit.count}
+      />
       <PokemonList
-        pokemons={pokemonData.slice(0, cardsLimit)}
+        pokemons={pokemonData.slice(0, cardsLimit.count)}
         flip={flip}
         handleFlip={handleFlip}
         setLoadedImages={setLoadedImages}
@@ -109,7 +114,7 @@ function App() {
         <EndModal
           endStatus={gameEnd}
           score={score}
-          cardsLimit={cardsLimit}
+          cardsLimit={cardsLimit.count}
           setCardsLimit={setCardsLimit}
           setScore={setScore}
           setSelectedPokemons={setSelectedPokemons}
