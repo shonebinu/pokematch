@@ -4,52 +4,19 @@ import PokemonList from "./components/PokemonList";
 import { shufflePokemonData, randomIntFromInterval } from "./utils";
 import StartModal from "./components/StartModal";
 import EndModal from "./components/EndModal";
-
-const fetchPokemonData = async (
-  pokemonsOffset = 0,
-  pokemonsLimit = 30,
-  setPokemonData
-) => {
-  try {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?offset=${pokemonsOffset}&limit=${pokemonsLimit}`
-    );
-    const data = await response.json();
-    const pokemons = data?.results;
-    const detailedPokemonData = await Promise.all(
-      pokemons
-        .filter((_, index) => index % 3 === 0) // skip 2 in b/w to avoid upgraded pokemons
-        .map(async (poke) => {
-          const pokeResponse = await fetch(poke.url);
-          const pokeData = await pokeResponse.json();
-          return {
-            name: poke.name,
-            image: pokeData?.sprites?.front_default,
-            cry: pokeData?.cries?.latest,
-          };
-        })
-    );
-    setPokemonData(detailedPokemonData);
-  } catch (error) {
-    setPokemonData(`Error: ${error.message}`);
-  }
-};
+import { fetchPokemonData } from "./pokemonApi";
 
 function App() {
   const [pokemonData, setPokemonData] = useState([]);
   const [cardsLimit, setCardsLimit] = useState({ count: 0 });
-
-  const [score, setScore] = useState(0);
   const [flip, setFlip] = useState(true);
   const [selectedPokemons, setSelectedPokemons] = useState([]);
-
+  const [score, setScore] = useState(0);
   const [loadedImages, setLoadedImages] = useState(0);
-
   const [gameEnd, setGameEnd] = useState(false);
 
-  let highScore = localStorage.getItem("highScore") ?? 0;
+  const highScore = localStorage.getItem("highScore") ?? 0;
   if (highScore < score && score <= cardsLimit.count) {
-    highScore = score;
     localStorage.setItem("highScore", score);
   }
 
@@ -61,7 +28,7 @@ function App() {
         setSelectedPokemons([...selectedPokemons, pokemonName]);
         setPokemonData(shufflePokemonData(pokemonData));
         setScore(newScore);
-        setTimeout(() => setFlip(false), 700);
+        setTimeout(() => setFlip(false), 500);
 
         if (newScore === cardsLimit.count) setGameEnd("win");
       }
@@ -77,19 +44,29 @@ function App() {
 
   useEffect(() => {
     const pokemonsCountLimit = cardsLimit.count * 3; // in 3 pokes, skips 2 and keeps 1 to avoid upgraded poke
-
     let mounted = true;
 
-    setPokemonData(new Array(cardsLimit.count).fill(""));
-    setFlip(true);
+    const loadPokemon = async () => {
+      setPokemonData(new Array(cardsLimit.count).fill(""));
+      setFlip(true);
 
-    if (mounted && cardsLimit.count > 0) {
-      fetchPokemonData(
-        randomIntFromInterval(0, 1000),
-        pokemonsCountLimit,
-        setPokemonData
-      );
-    }
+      if (mounted && cardsLimit.count > 0) {
+        try {
+          const data = await fetchPokemonData(
+            randomIntFromInterval(0, 1000),
+            pokemonsCountLimit
+          );
+
+          if (mounted) {
+            setPokemonData(data);
+          }
+        } catch (error) {
+          console.error("Failed to load Pokemon: ", error);
+        }
+      }
+    };
+
+    loadPokemon();
 
     return () => {
       mounted = false;
