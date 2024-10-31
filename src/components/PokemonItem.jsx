@@ -5,7 +5,7 @@ function PokemonItem({ pokemon, flip, handleFlip, setLoadedImages }) {
   pokemonCry.volume = 0.02;
   return (
     <div
-      className={`backdrop-blur bg-black/15 flex-1 p-2 rounded cursor-pointer
+      className={`backdrop-blur bg-black/15 flex-1 p-2 rounded cursor-pointer flex flex-col
             transform hover:scale-105 hover:-rotate-1 transition-transform duration-500 ease-in-out shadow-lg ${
               flip ? "aspect-[5.2/6]" : ""
             }`}
@@ -19,7 +19,7 @@ function PokemonItem({ pokemon, flip, handleFlip, setLoadedImages }) {
       <img
         src={pokemon.image}
         alt={pokemon.name}
-        className={`w-full ${flip ? "invisible absolute" : ""}`}
+        className={`${flip ? "invisible absolute" : ""}`}
         onLoad={() => pokemon.image && setLoadedImages((count) => count + 1)}
       />
       {!flip && (
